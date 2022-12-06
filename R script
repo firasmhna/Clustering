@@ -37,5 +37,5 @@ HM_rna <- ComplexHeatmap::Heatmap(heatmap,
                                   left_annotation = gene_annotation)
 tiff(filename = "Clustering-METH.tiff",width = 32,height = 25,units = "cm",pointsize = 12,res=400)
 draw(HM_rna)
-++++++
+
 
