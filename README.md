@@ -22,4 +22,4 @@ TCGA-QK-A6IF		NA	      Male	     Oropharynx
 TCGA-CR-5248	Positive	  Male	     Oropharynx
 TCGA-CV-7242	Negative	 Female       Larynx
 
-make sure that patient ids are in the same order in both files 
+make sure that patient ids are in the same order in both files $$$
