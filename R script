@@ -1,0 +1,40 @@
+library(ComplexHeatmap)
+library(circlize)
+library(RColorBrewer)
+library(tidyverse)
+row.names(heatmap) <- heatmap$Patients
+heatmap$Patients <- NULL #transpose the matrix, that the patients are in the columns
+heatmap <- as.matrix.data.frame(heatmap)
+heatmap <- log(heatmap+1)
+heatmap <- scale(heatmap)
+clustering <- hclust(dist(heatmap, method = "euclidean"), method = "ward.D2")
+heatmap <- t(heatmap)
+row.names(clinical) <- clinical$Patients
+clinical$Patients <- NULL
+clinical<-as.data.frame(clinical)
+clinical_annotations = HeatmapAnnotation(df = clinical,
+                                         which = "column",
+                                         col = list(
+                                           Gender = c("Male"="blue", "Female" = "red")
+                                         ),
+                                         annotation_name_side = "right",
+                                         na_col = "white")
+col_rna = colorRamp2(c(-3, 0, 3), c("blue", "#EEEEEE", "red"), space = "LAB", transparency = 0)
+HM_rna <- ComplexHeatmap::Heatmap(heatmap,
+                                  col = col_rna,
+                                  name = "Expression",
+                                  cluster_rows = FALSE,
+                                  cluster_columns = clustering,
+                                  column_split = 4, 
+                                  column_title =  c("A1", "A2", "B1", "B2"),
+                                  column_title_side = "bottom",
+                                  show_column_names = FALSE,
+                                  show_row_names = T, 
+                                  show_row_dend = F,
+                                  use_raster = TRUE, 
+                                  raster_device = "png",
+                                  top_annotation = clinical_annotations,
+                                  left_annotation = gene_annotation)
+tiff(filename = "Clustering-METH.tiff",width = 32,height = 25,units = "cm",pointsize = 12,res=400)
+draw(HM_rna)
+
